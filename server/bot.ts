@@ -22,24 +22,28 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const firstName = msg.from?.first_name || 'Foydalanuvchi';
   
-  const welcomeMessage = `Assalomu alaykum, ${firstName}! 🌟
+  const welcomeMessage = `🌟 Assalomu alaykum, aziz ${firstName}! 
 
-🚀 **Planify Up** - Sizning hayot rejangiz!
+🎯 **Planify Up** - Hayotingizni boshqarishning eng oson yo'li!
 
-Ushbu maxsus dastur sizga yordam beradi:
-✨ Har kuni samarali reja tuzishda
-🎯 Katta maqsadlaringizni qadamlab erishishda
-📈 Muvaffaqiyatlaringizni ko'zda tutishda
-💪 O'zingizni rivojlantirishda
+Ushbu ajoyib dastur sizga quyidagilarni taqdim etadi:
 
-Hayalingizni haqiqatga aylantirish uchun pastdagi tugmani bosing! 👇`;
+✨ **Kunlik rejalashtirish** - Har kuni aniq maqsadlar bilan boshlang
+🎯 **Katta orzularni amalga oshirish** - Qadamlab, tobora yaqinlashing  
+📈 **Progress monitoring** - Har bir yutuqingizni kuzatib boring
+🏆 **Achievement tizimi** - Muvaffaqiyatlaringizni nishonlang
+💪 **Motivatsiya va ilhom** - Doimo oldinga intiling
+
+Sizning eng yaxshi versiyangizga aylanish sayohati shu yerdan boshlanadi! 
+
+Keling, birgalikda hayallaringizni haqiqatga aylantiramiz! 🚀`;
 
   const options = {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: '🌟 Hayallarimni amalga oshirish',
+            text: '🚀 Sayohatni boshlash',
             web_app: {
               url: process.env.REPLIT_DOMAINS?.split(',')[0] 
                 ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
@@ -57,22 +61,32 @@ Hayalingizni haqiqatga aylantirish uchun pastdagi tugmani bosing! 👇`;
 bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
   
-  const helpMessage = `🌟 **Planify Up - Yordam markazi**
+  const helpMessage = `🎯 **Planify Up - Sizning shaxsiy assistentingiz**
 
-**Komandalar:**
-🚀 /start - Asosiy menyu va ilovani ochish
-🆘 /help - Bu yordam bo'limi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Ilovani ishlatish:**
-✨ "🌟 Hayallarimni amalga oshirish" tugmasini bosing
-🌍 Til sozlamalarini Profil bo'limidan o'zgartiring
-➕ Yangi vazifa qo'shish uchun "+" belgisini bosing
-📊 Progressingizni Statistika bo'limida kuzating
-🎯 Maqsadlaringizni belgilab, ularni amalga oshiring
+**🎮 Asosiy komandalar:**
+🚀 /start - Ilovani ishga tushirish
+🆘 /help - Batafsil yo'riqnoma
 
-**Texnik yordam:**
-Agar muammo yuzaga kelsa, /start buyrug'ini qayta ishlatib ko'ring.
-Planify Up sizning muvaffaqiyat yo'lingizda eng yaxshi hamkoringiz! 💪`;
+**📱 Ilovadan foydalanish:**
+✨ "🚀 Sayohatni boshlash" tugmasini bosing
+🌐 Til (O'zbek/Rus/Ingliz) ni Profil bo'limidan tanlang
+➕ Yangi vazifa qo'shish - "+" tugmasini bosing
+📊 Statistikada progressingizni kuzating
+🎯 Maqsadlar yarating va ularni amalga oshiring
+📅 Kunlik rejalaringizni tuzib boring
+
+**🏆 Imkoniyatlar:**
+• Vazifalarni kategoriyalar bo'yicha guruhlash
+• Maqsadlar uchun progress tracking
+• Achievement tizimi orqali motivatsiya
+• Har kuni yangi challenge'lar
+• Shaxsiy statistika va tahlillar
+
+**🔧 Yordam kerakmi?**
+Muammo bo'lsa, /start ni qayta ishlatib ko'ring
+Planify Up - sizning muvaffaqiyat kalit! 🗝️✨`;
 
   bot.sendMessage(chatId, helpMessage);
 });
