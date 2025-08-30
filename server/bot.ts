@@ -22,21 +22,16 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const firstName = msg.from?.first_name || 'Foydalanuvchi';
   
-  const welcomeMessage = `🌟 Assalomu alaykum, aziz ${firstName}! 
+  const welcomeMessage = `Xush kelibsiz, Planify Up!
 
-🎯 **Planify Up** - Hayotingizni boshqarishning eng oson yo'li!
+Bu bot sizga yordam beradi:
 
-Ushbu ajoyib dastur sizga quyidagilarni taqdim etadi:
+📝 Kunlik vazifalarni boshqarish
+🎯 Maqsadlar qo'yish va amalga oshirish
+📊 Progressingizni kuzatish
+🏆 Yutuqlarga erishish
 
-✨ **Kunlik rejalashtirish** - Har kuni aniq maqsadlar bilan boshlang
-🎯 **Katta orzularni amalga oshirish** - Qadamlab, tobora yaqinlashing  
-📈 **Progress monitoring** - Har bir yutuqingizni kuzatib boring
-🏆 **Achievement tizimi** - Muvaffaqiyatlaringizni nishonlang
-💪 **Motivatsiya va ilhom** - Doimo oldinga intiling
-
-Sizning eng yaxshi versiyangizga aylanish sayohati shu yerdan boshlanadi! 
-
-Keling, birgalikda hayallaringizni haqiqatga aylantiramiz! 🚀`;
+Mini ilovaga kirish uchun pastdagi tugmani bosing! 👇`;
 
   const options = {
     reply_markup: {
