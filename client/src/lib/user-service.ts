@@ -72,15 +72,15 @@ export class UserService {
       const response = await apiRequest("POST", "/api/users", demoUser);
       if (response.ok) {
         this.currentUser = await response.json();
-        return this.currentUser;
+        return this.currentUser!;
       }
     } catch (error) {
       // If demo user already exists, try to get it
       try {
-        const response = await apiRequest("GET", "/api/users/demo-user");
+        const response = await apiRequest("GET", "/api/users/722b51ba-3593-44ac-82e1-ae79ac0c3304");
         if (response.ok) {
           this.currentUser = await response.json();
-          return this.currentUser;
+          return this.currentUser!;
         }
       } catch (e) {
         console.error("Failed to get demo user:", e);

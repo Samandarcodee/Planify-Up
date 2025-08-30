@@ -9,12 +9,7 @@ if (!token) {
 
 // Create a bot without polling in Replit environment
 const bot = new TelegramBot(token, { 
-  polling: false,
-  request: {
-    agentOptions: {
-      timeout: 30000
-    }
-  }
+  polling: false
 });
 
 // Bot kommandalari
