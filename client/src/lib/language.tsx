@@ -399,25 +399,24 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, [language]);
 
   const t = (key: string, params?: Record<string, string>) => {
-    const keys = key.split(".");
-    let value: any = translations[language];
-    
-    for (const k of keys) {
-      value = value?.[k];
-    }
+    const translation = translations[language];
+    const value = translation[key as keyof typeof translation];
     
     if (typeof value !== 'string') {
+      console.log('Translation not found for key:', key, 'in language:', language);
       return key;
     }
+    
+    let result = value;
     
     // Replace parameters like {name}
     if (params) {
       Object.entries(params).forEach(([param, val]) => {
-        value = value.replace(`{${param}}`, val);
+        result = result.replace(`{${param}}`, val);
       });
     }
     
-    return value;
+    return result;
   };
 
   return (
