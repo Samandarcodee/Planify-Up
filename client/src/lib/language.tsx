@@ -10,7 +10,7 @@ interface LanguageProviderProps {
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string>) => string;
 }
 
 const translations = {
@@ -399,16 +399,25 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, [language]);
 
   const t = (key: string, params?: Record<string, string>) => {
-    let text = translations[language][key as keyof typeof translations[Language]] || key;
+    const keys = key.split(".");
+    let value: any = translations[language];
+    
+    for (const k of keys) {
+      value = value?.[k];
+    }
+    
+    if (typeof value !== 'string') {
+      return key;
+    }
     
     // Replace parameters like {name}
     if (params) {
-      Object.entries(params).forEach(([param, value]) => {
-        text = text.replace(`{${param}}`, value);
+      Object.entries(params).forEach(([param, val]) => {
+        value = value.replace(`{${param}}`, val);
       });
     }
     
-    return text;
+    return value;
   };
 
   return (
