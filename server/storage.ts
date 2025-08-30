@@ -2,6 +2,7 @@ import { users, type User, type InsertUser, tasks, type Task, type InsertTask, g
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import { verifyPassword } from "./auth";
 
 export interface IStorage {
   // User methods
@@ -9,6 +10,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByTelegramId(telegramId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  verifyPassword(password: string, hashedPassword: string): Promise<boolean>;
   
   // Task methods
   getUserTasks(userId: string): Promise<Task[]>;
@@ -64,6 +66,10 @@ export class DatabaseStorage implements IStorage {
       .values(insertUser)
       .returning();
     return user;
+  }
+
+  async verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+    return await verifyPassword(password, hashedPassword);
   }
 
   // Task methods

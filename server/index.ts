@@ -3,10 +3,16 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupBotWebhook } from "./bot"; // Telegram bot ni ishga tushirish
 import { scheduler } from "./scheduler"; // Notification scheduler
+import { errorHandler, notFound } from "./error-handler";
+import { applyMiddleware } from "./middleware";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Apply security and middleware
+applyMiddleware(app);
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -47,13 +53,11 @@ app.use((req, res, next) => {
   // Notification scheduler ni ishga tushirish
   scheduler.start();
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
+  // 404 handler - must be before error handler
+  app.use(notFound);
+  
+  // Global error handler
+  app.use(errorHandler);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
