@@ -92,7 +92,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(500).json({ message: "Failed to get tasks" });
     }
-  };
+  });
 
   app.get("/api/tasks/:userId/date/:date", async (req, res) => {
     try {
