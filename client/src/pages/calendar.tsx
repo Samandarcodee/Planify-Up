@@ -6,7 +6,7 @@ import { BottomNavigation } from "@/components/bottom-navigation";
 import { TaskModal } from "@/components/task-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { tgApp } from "@/lib/telegram";
+import { userService } from "@/lib/user-service";
 import { type Task } from "@shared/schema";
 
 export default function Calendar() {
@@ -16,11 +16,14 @@ export default function Calendar() {
   const [currentUserId, setCurrentUserId] = useState<string>("");
 
   useEffect(() => {
-    const telegramUser = tgApp.getUser();
-    if (telegramUser) {
-      setCurrentUserId(telegramUser.id.toString());
-      console.log('Calendar user ID set:', telegramUser.id.toString());
-    }
+    const initUser = async () => {
+      const user = await userService.getCurrentUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        console.log('Calendar user ID set:', user.id);
+      }
+    };
+    initUser();
   }, []);
 
   const { data: allTasks = [] } = useQuery<Task[]>({

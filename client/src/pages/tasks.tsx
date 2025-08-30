@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { tgApp } from "@/lib/telegram";
+import { userService } from "@/lib/user-service";
 import { useLanguage } from "@/lib/language";
 import { type Task } from "@shared/schema";
 
@@ -23,11 +23,14 @@ export default function Tasks() {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const telegramUser = tgApp.getUser();
-    if (telegramUser) {
-      setCurrentUserId(telegramUser.id.toString());
-      console.log('Tasks page user ID set:', telegramUser.id.toString());
-    }
+    const initUser = async () => {
+      const user = await userService.getCurrentUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        console.log('Tasks page user ID set:', user.id);
+      }
+    };
+    initUser();
   }, []);
 
   const { data: allTasks = [], isLoading } = useQuery<Task[]>({
