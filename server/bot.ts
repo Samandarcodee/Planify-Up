@@ -22,24 +22,24 @@ bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const firstName = msg.from?.first_name || 'Foydalanuvchi';
   
-  const welcomeMessage = `Salom ${firstName}! 👋
+  const welcomeMessage = `Assalomu alaykum, ${firstName}! 🌟
 
-🎯 **Planify Up** ga xush kelibsiz!
+🚀 **Planify Up** - Sizning hayot rejangiz!
 
-Bu bot orqali siz:
-📝 Kunlik vazifalarni boshqarishingiz
-🎯 Maqsadlar belgilashingiz  
-📊 O'z progressingizni kuzatishingiz
-🏆 Yutuqlarga erishishingiz mumkin
+Ushbu maxsus dastur sizga yordam beradi:
+✨ Har kuni samarali reja tuzishda
+🎯 Katta maqsadlaringizni qadamlab erishishda
+📈 Muvaffaqiyatlaringizni ko'zda tutishda
+💪 O'zingizni rivojlantirishda
 
-Mini ilovani ochish uchun pastdagi tugmani bosing! 👇`;
+Hayalingizni haqiqatga aylantirish uchun pastdagi tugmani bosing! 👇`;
 
   const options = {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: '🚀 Ilovani ochish',
+            text: '🌟 Hayallarimni amalga oshirish',
             web_app: {
               url: process.env.REPLIT_DOMAINS?.split(',')[0] 
                 ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
@@ -57,20 +57,22 @@ Mini ilovani ochish uchun pastdagi tugmani bosing! 👇`;
 bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
   
-  const helpMessage = `🆘 **Yordam**
+  const helpMessage = `🌟 **Planify Up - Yordam markazi**
 
-**Mavjud komandalar:**
-/start - Botni qayta ishga tushirish
-/help - Yordam ma'lumotlari
+**Komandalar:**
+🚀 /start - Asosiy menyu va ilovani ochish
+🆘 /help - Bu yordam bo'limi
 
-**Ilovadan foydalanish:**
-• Mini ilovani ochish uchun "🚀 Ilovani ochish" tugmasini bosing
-• Tilni o'zgartirish uchun Profil bo'limiga o'ting
-• Vazifa qo'shish uchun "+" tugmasini bosing
-• Maqsadlaringizni Statistics bo'limida kuzating
+**Ilovani ishlatish:**
+✨ "🌟 Hayallarimni amalga oshirish" tugmasini bosing
+🌍 Til sozlamalarini Profil bo'limidan o'zgartiring
+➕ Yangi vazifa qo'shish uchun "+" belgisini bosing
+📊 Progressingizni Statistika bo'limida kuzating
+🎯 Maqsadlaringizni belgilab, ularni amalga oshiring
 
-**Qo'llab-quvvatlash:**
-Savol yoki muammo bo'lsa, /start kommandasini ishlatib qayta urinib ko'ring.`;
+**Texnik yordam:**
+Agar muammo yuzaga kelsa, /start buyrug'ini qayta ishlatib ko'ring.
+Planify Up sizning muvaffaqiyat yo'lingizda eng yaxshi hamkoringiz! 💪`;
 
   bot.sendMessage(chatId, helpMessage);
 });
