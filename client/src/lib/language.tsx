@@ -142,6 +142,10 @@ const translations = {
     "tasks.updated_error": "Vazifa yangilanmadi",
     "tasks.deleted_success": "Vazifa o'chirildi",
     "tasks.deleted_error": "Vazifa o'chirilmadi",
+    
+    // Dashboard additional
+    "dashboard.add_task_desc": "Yangi reja",
+    "dashboard.add_goal_desc": "Yangi yo'l",
   },
   
   ru: {
@@ -272,6 +276,10 @@ const translations = {
     "tasks.updated_error": "Задача не обновлена",
     "tasks.deleted_success": "Задача удалена",
     "tasks.deleted_error": "Задача не удалена",
+    
+    // Dashboard additional
+    "dashboard.add_task_desc": "Новый план",
+    "dashboard.add_goal_desc": "Новый путь",
   },
   
   en: {
@@ -402,6 +410,10 @@ const translations = {
     "tasks.updated_error": "Task not updated",
     "tasks.deleted_success": "Task deleted",
     "tasks.deleted_error": "Task not deleted",
+    
+    // Dashboard additional  
+    "dashboard.add_task_desc": "New plan",
+    "dashboard.add_goal_desc": "New path",
   }
 };
 

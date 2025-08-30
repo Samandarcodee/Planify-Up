@@ -124,19 +124,19 @@ export default function Dashboard() {
                 <div className="text-2xl font-bold" data-testid="text-completed-tasks">
                   {stats?.completedTasks || 0}
                 </div>
-                <div className="text-sm text-primary-foreground/80">Bajarildi</div>
+                <div className="text-sm text-primary-foreground/80">{t('dashboard.completed')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold" data-testid="text-total-tasks">
                   {todayTasks.length}
                 </div>
-                <div className="text-sm text-primary-foreground/80">Jami</div>
+                <div className="text-sm text-primary-foreground/80">{t('dashboard.total')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold" data-testid="text-streak">
                   {stats?.currentStreak || 0}
                 </div>
-                <div className="text-sm text-primary-foreground/80">Ketma-ketlik</div>
+                <div className="text-sm text-primary-foreground/80">{t('dashboard.streak')}</div>
               </div>
             </div>
           </div>
@@ -144,37 +144,37 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <section className="mb-8">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
-              className="h-auto p-4 justify-start"
+              className="h-auto p-3 justify-start"
               onClick={() => setTaskModalOpen(true)}
               data-testid="button-add-task"
             >
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Plus className="w-5 h-5 text-primary" />
+              <div className="flex items-center space-x-2 w-full">
+                <div className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Plus className="w-4 h-4 text-primary" />
                 </div>
-                <div className="text-left">
-                  <div className="font-medium text-sm">Vazifa qo'shish</div>
-                  <div className="text-xs text-muted-foreground">Yangi reja yarating</div>
+                <div className="text-left min-w-0 flex-1">
+                  <div className="font-medium text-xs text-overflow-fix">Vazifa</div>
+                  <div className="text-xs text-muted-foreground text-overflow-fix">Qo'shish</div>
                 </div>
               </div>
             </Button>
             
             <Button
               variant="outline"
-              className="h-auto p-4 justify-start"
+              className="h-auto p-3 justify-start"
               onClick={() => setGoalModalOpen(true)}
               data-testid="button-add-goal"
             >
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
-                  <Plus className="w-5 h-5 text-accent" />
+              <div className="flex items-center space-x-2 w-full">
+                <div className="w-9 h-9 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Plus className="w-4 h-4 text-accent" />
                 </div>
-                <div className="text-left">
-                  <div className="font-medium text-sm">Maqsad belgilash</div>
-                  <div className="text-xs text-muted-foreground">Yangi yo'l tanlang</div>
+                <div className="text-left min-w-0 flex-1">
+                  <div className="font-medium text-xs text-overflow-fix">Maqsad</div>
+                  <div className="text-xs text-muted-foreground text-overflow-fix">Belgilash</div>
                 </div>
               </div>
             </Button>

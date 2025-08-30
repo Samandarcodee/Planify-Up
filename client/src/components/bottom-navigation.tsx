@@ -33,7 +33,7 @@ export function BottomNavigation() {
                 data-testid={item.testId}
               >
                 <Icon className="w-6 h-6" />
-                <span className="text-xs font-medium">{item.label}</span>
+                <span className="nav-text font-medium text-overflow-fix">{item.label}</span>
               </button>
             </Link>
           );

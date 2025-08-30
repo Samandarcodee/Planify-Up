@@ -144,6 +144,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Button mobile fixes */
+.button-mobile {
+  min-width: 0;
+  flex: 1;
+  word-wrap: break-word;
+}
+
+/* Navigation text fix */
+.nav-text {
+  max-width: 60px;
+  font-size: 0.7rem;
+  line-height: 1;
 }
 
 /* Card content padding fixes for mobile */
