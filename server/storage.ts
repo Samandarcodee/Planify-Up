@@ -80,6 +80,17 @@ export class DatabaseStorage implements IStorage {
       .insert(tasks)
       .values(insertTask)
       .returning();
+    
+    // Vazifa yaratilganda notification yuborish
+    try {
+      const { notificationService } = await import("./notification-service");
+      setTimeout(() => {
+        notificationService.sendTaskReminder(task.userId, task);
+      }, 5000); // 5 soniya kechikish bilan
+    } catch (error) {
+      console.log('Notification yuborishda xato:', error);
+    }
+    
     return task;
   }
 
@@ -120,6 +131,19 @@ export class DatabaseStorage implements IStorage {
       .set(updates)
       .where(eq(goals.id, id))
       .returning();
+    
+    // Maqsad yangilanganda progress notification yuborish
+    if (goal && updates.currentValue !== undefined) {
+      try {
+        const { notificationService } = await import("./notification-service");
+        setTimeout(() => {
+          notificationService.sendGoalProgress(goal.userId, goal);
+        }, 2000);
+      } catch (error) {
+        console.log('Goal progress notification yuborishda xato:', error);
+      }
+    }
+    
     return goal || undefined;
   }
 

@@ -3,6 +3,7 @@ import { User, Settings, Trophy, TrendingUp, Calendar, Moon, Sun, Globe } from "
 import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "@/components/app-header";
 import { BottomNavigation } from "@/components/bottom-navigation";
+import { NotificationPanel } from "@/components/notification-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -10,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { tgApp } from "@/lib/telegram";
 import { useTheme } from "@/lib/theme";
 import { useLanguage } from "@/lib/language";
+import { userService } from "@/lib/user-service";
 import { type Achievement } from "@shared/schema";
 
 export default function Profile() {
@@ -19,10 +21,14 @@ export default function Profile() {
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
-    if (telegramUser) {
-      setCurrentUserId(telegramUser.id.toString());
-    }
-  }, [telegramUser]);
+    const initUser = async () => {
+      const user = await userService.getCurrentUser();
+      if (user) {
+        setCurrentUserId(user.id);
+      }
+    };
+    initUser();
+  }, []);
 
   const { data: stats } = useQuery<{
     totalTasks: number;
@@ -259,6 +265,11 @@ export default function Profile() {
               </CardContent>
             </Card>
           </div>
+        </section>
+
+        {/* Notification Test Panel */}
+        <section className="mb-8">
+          <NotificationPanel userId={currentUserId} />
         </section>
       </main>
 

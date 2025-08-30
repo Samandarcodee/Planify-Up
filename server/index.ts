@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupBotWebhook } from "./bot"; // Telegram bot ni ishga tushirish
+import { scheduler } from "./scheduler"; // Notification scheduler
 
 const app = express();
 app.use(express.json());
@@ -42,6 +43,9 @@ app.use((req, res, next) => {
   
   // Telegram bot webhook setup
   setupBotWebhook(app);
+  
+  // Notification scheduler ni ishga tushirish
+  scheduler.start();
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

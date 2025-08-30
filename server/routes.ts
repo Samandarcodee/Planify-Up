@@ -178,6 +178,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Notification routes
+  app.post("/api/notifications/send", async (req, res) => {
+    try {
+      const { userId, type } = req.body;
+      if (!userId || !type) {
+        return res.status(400).json({ message: "userId and type are required" });
+      }
+
+      const { scheduler } = await import("./scheduler");
+      await scheduler.sendImmediateNotification(userId, type);
+      
+      res.json({ message: "Notification sent successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to send notification" });
+    }
+  });
+
+  app.post("/api/notifications/test", async (req, res) => {
+    try {
+      const { notificationService } = await import("./notification-service");
+      
+      // Test notification
+      await notificationService.sendMotivationalMessage("722b51ba-3593-44ac-82e1-ae79ac0c3304");
+      
+      res.json({ message: "Test notification sent" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to send test notification" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
