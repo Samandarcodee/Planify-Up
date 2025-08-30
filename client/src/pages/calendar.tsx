@@ -13,12 +13,13 @@ export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [taskModalOpen, setTaskModalOpen] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
+  const [currentUserId, setCurrentUserId] = useState<string>("");
 
   useEffect(() => {
     const telegramUser = tgApp.getUser();
     if (telegramUser) {
       setCurrentUserId(telegramUser.id.toString());
+      console.log('Calendar user ID set:', telegramUser.id.toString());
     }
   }, []);
 

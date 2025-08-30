@@ -16,7 +16,7 @@ import { type Task } from "@shared/schema";
 
 export default function Tasks() {
   const [taskModalOpen, setTaskModalOpen] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
+  const [currentUserId, setCurrentUserId] = useState<string>("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -26,6 +26,7 @@ export default function Tasks() {
     const telegramUser = tgApp.getUser();
     if (telegramUser) {
       setCurrentUserId(telegramUser.id.toString());
+      console.log('Tasks page user ID set:', telegramUser.id.toString());
     }
   }, []);
 

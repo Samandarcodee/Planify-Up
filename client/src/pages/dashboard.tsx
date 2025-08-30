@@ -15,7 +15,7 @@ import { type Task, type Goal, type Achievement } from "@shared/schema";
 export default function Dashboard() {
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
+  const [currentUserId, setCurrentUserId] = useState<string>("");
   const { t } = useLanguage();
 
   const today = new Date().toISOString().split('T')[0];
@@ -26,6 +26,7 @@ export default function Dashboard() {
       const user = await userService.getCurrentUser();
       if (user) {
         setCurrentUserId(user.id);
+        console.log('Dashboard user ID set:', user.id);
       }
     };
     initUser();
