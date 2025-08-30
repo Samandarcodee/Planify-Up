@@ -94,9 +94,42 @@
 }
 
 .app-container {
+  width: 100%;
   max-width: 450px;
   margin: 0 auto;
   min-height: 100vh;
+  padding-bottom: 80px; /* Space for bottom navigation */
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+@media (max-width: 400px) {
+  .app-container {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  
+  .glass-effect {
+    padding: 12px 8px;
+  }
+  
+  .text-lg {
+    font-size: 1rem;
+  }
+  
+  .text-xl {
+    font-size: 1.125rem;
+  }
+  
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  
+  /* Fix select width on small screens */
+  .w-32 {
+    width: 6rem;
+  }
 }
 
 .glass-effect {

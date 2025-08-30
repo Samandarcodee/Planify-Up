@@ -399,12 +399,18 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, [language]);
 
   const t = (key: string, params?: Record<string, string>) => {
-    const translation = translations[language];
-    const value = translation[key as keyof typeof translation];
+    // Get the correct translation object for the current language
+    const langTranslations = translations[language];
+    
+    // Use simple key lookup - no nested keys for now to fix the issue
+    let value = langTranslations[key as keyof typeof langTranslations];
     
     if (typeof value !== 'string') {
-      console.log('Translation not found for key:', key, 'in language:', language);
-      return key;
+      // Fallback to uz if translation not found
+      value = translations.uz[key as keyof typeof translations.uz];
+      if (typeof value !== 'string') {
+        return key; // Return key if no translation found
+      }
     }
     
     let result = value;
@@ -412,7 +418,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     // Replace parameters like {name}
     if (params) {
       Object.entries(params).forEach(([param, val]) => {
-        result = result.replace(`{${param}}`, val);
+        result = result.replace(new RegExp(`\\{${param}\\}`, 'g'), val);
       });
     }
     

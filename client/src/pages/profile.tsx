@@ -24,7 +24,14 @@ export default function Profile() {
     }
   }, [telegramUser]);
 
-  const { data: stats } = useQuery({
+  const { data: stats } = useQuery<{
+    totalTasks: number;
+    completedTasks: number;
+    totalGoals: number;
+    completedGoals: number;
+    currentStreak: number;
+    weeklyCompletionRate: number;
+  }>({
     queryKey: ["/api/stats", currentUserId],
     enabled: !!currentUserId,
   });
@@ -189,9 +196,9 @@ export default function Profile() {
                     <Globe className="w-5 h-5 text-muted-foreground" />
                     <span className="font-medium">{t('profile.language')}</span>
                   </div>
-                  <Select value={language} onValueChange={(value: any) => setLanguage(value)}>
+                  <Select value={language} onValueChange={(value) => setLanguage(value as "uz" | "ru" | "en")}>
                     <SelectTrigger className="w-32">
-                      <SelectValue />
+                      <SelectValue placeholder="Til tanlash" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="uz">O'zbek</SelectItem>
@@ -215,14 +222,14 @@ export default function Profile() {
                     )}
                     <span className="font-medium">{t('profile.theme')}</span>
                   </div>
-                  <Select value={theme} onValueChange={(value: any) => setTheme(value)}>
+                  <Select value={theme} onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}>
                     <SelectTrigger className="w-32">
-                      <SelectValue />
+                      <SelectValue placeholder="Rejim" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="light">{t('profile.light_mode')}</SelectItem>
                       <SelectItem value="dark">{t('profile.dark_mode')}</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
+                      <SelectItem value="system">Sistema</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
