@@ -68,7 +68,7 @@ export const invalidateCache = (pattern) => {
         const originalJson = res.json;
         res.json = function (data) {
             // Invalidate related cache entries
-            for (const [key] of cacheManager.cache.entries()) {
+            for (const [key] of cacheManager['cache'].entries()) {
                 if (key.includes(pattern)) {
                     cacheManager.delete(key);
                 }

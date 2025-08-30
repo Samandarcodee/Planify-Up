@@ -2,7 +2,6 @@ import { createServer } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertTaskSchema, insertGoalSchema, insertAchievementSchema } from "@shared/schema";
 import { rateLimit, hashPassword, generateToken } from "./auth";
-import { cacheMiddleware, invalidateCache } from "./cache";
 export async function registerRoutes(app) {
     // Apply rate limiting to all routes
     app.use(rateLimit(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
@@ -47,7 +46,7 @@ export async function registerRoutes(app) {
             res.status(500).json({ message: "Login failed" });
         }
     });
-    app.get("/api/users/:id", cacheMiddleware(10 * 60 * 1000), async (req, res) => {
+    app.get("/api/users/:id", async (req, res) => {
         try {
             const user = await storage.getUser(req.params.id);
             if (!user) {
@@ -72,7 +71,7 @@ export async function registerRoutes(app) {
         }
     });
     // Task routes
-    app.get("/api/tasks/:userId", cacheMiddleware(2 * 60 * 1000), async (req, res) => {
+    app.get("/api/tasks/:userId", async (req, res) => {
         try {
             const tasks = await storage.getUserTasks(req.params.userId);
             res.json(tasks);
@@ -90,7 +89,7 @@ export async function registerRoutes(app) {
             res.status(500).json({ message: "Failed to get tasks for date" });
         }
     });
-    app.post("/api/tasks", invalidateCache("tasks"), async (req, res) => {
+    app.post("/api/tasks", async (req, res) => {
         try {
             const taskData = insertTaskSchema.parse(req.body);
             const task = await storage.createTask(taskData);

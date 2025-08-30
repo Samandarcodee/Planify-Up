@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { insertTaskSchema, type InsertTask } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,7 +30,6 @@ export function TaskModal({ open, onOpenChange, userId }: TaskModalProps) {
   const queryClient = useQueryClient();
   
   const form = useForm<InsertTask>({
-    resolver: zodResolver(insertTaskSchema),
     defaultValues: {
       userId,
       title: "",
@@ -134,6 +133,7 @@ export function TaskModal({ open, onOpenChange, userId }: TaskModalProps) {
                       <Input 
                         type="time" 
                         {...field}
+                        value={field.value || ''}
                         data-testid="input-task-time"
                       />
                     </FormControl>
