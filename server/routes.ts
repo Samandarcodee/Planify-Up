@@ -60,7 +60,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/users/:id", cacheMiddleware(10 * 60 * 1000), async (req, res) => {
+  app.get("/api/users/:id", async (req, res) => {
     try {
       const user = await storage.getUser(req.params.id);
       if (!user) {
@@ -85,7 +85,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Task routes
-  app.get("/api/tasks/:userId", cacheMiddleware(2 * 60 * 1000), async (req, res) => {
+  app.get("/api/tasks/:userId", async (req, res) => {
     try {
       const tasks = await storage.getUserTasks(req.params.userId);
       res.json(tasks);
@@ -103,7 +103,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/tasks", invalidateCache("tasks"), async (req, res) => {
+  app.post("/api/tasks", async (req, res) => {
     try {
       const taskData = insertTaskSchema.parse(req.body);
       const task = await storage.createTask(taskData);
