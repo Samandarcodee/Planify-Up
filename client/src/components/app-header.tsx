@@ -1,6 +1,7 @@
 import { User } from "lucide-react";
 import { Bell } from "lucide-react";
 import { tgApp } from "@/lib/telegram";
+import { useLanguage } from "@/lib/language";
 
 interface AppHeaderProps {
   userName?: string;
@@ -9,7 +10,8 @@ interface AppHeaderProps {
 
 export function AppHeader({ userName, onNotificationsClick }: AppHeaderProps) {
   const telegramUser = tgApp.getUser();
-  const displayName = userName || telegramUser?.first_name || "Foydalanuvchi";
+  const { t } = useLanguage();
+  const displayName = userName || telegramUser?.first_name || t('common.user');
 
   return (
     <header className="sticky top-0 z-50 glass-effect border-b border-border px-4 py-3">
@@ -20,9 +22,9 @@ export function AppHeader({ userName, onNotificationsClick }: AppHeaderProps) {
           </div>
           <div>
             <h1 className="text-lg font-semibold text-foreground" data-testid="greeting-text">
-              Salom, {displayName}!
+              {t('dashboard.greeting', { name: displayName })}
             </h1>
-            <p className="text-sm text-muted-foreground">Bugungi kun uchun tayyor bo'lasizmi?</p>
+            <p className="text-sm text-muted-foreground">{t('dashboard.ready')}</p>
           </div>
         </div>
         <button 

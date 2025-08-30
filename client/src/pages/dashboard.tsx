@@ -8,22 +8,27 @@ import { GoalModal } from "@/components/goal-modal";
 import { ProgressRing } from "@/components/progress-ring";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { tgApp } from "@/lib/telegram";
+import { userService } from "@/lib/user-service";
+import { useLanguage } from "@/lib/language";
 import { type Task, type Goal, type Achievement } from "@shared/schema";
 
 export default function Dashboard() {
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
+  const { t } = useLanguage();
 
   const today = new Date().toISOString().split('T')[0];
 
-  // Initialize user from Telegram
+  // Initialize user
   useEffect(() => {
-    const telegramUser = tgApp.getUser();
-    if (telegramUser) {
-      setCurrentUserId(telegramUser.id.toString());
-    }
+    const initUser = async () => {
+      const user = await userService.getCurrentUser();
+      if (user) {
+        setCurrentUserId(user.id);
+      }
+    };
+    initUser();
   }, []);
 
   // Fetch today's tasks
@@ -39,7 +44,14 @@ export default function Dashboard() {
   });
 
   // Fetch user stats
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<{
+    totalTasks: number;
+    completedTasks: number;
+    totalGoals: number;
+    completedGoals: number;
+    currentStreak: number;
+    weeklyCompletionRate: number;
+  }>({
     queryKey: ["/api/stats", currentUserId],
     enabled: !!currentUserId,
   });
@@ -93,7 +105,7 @@ export default function Dashboard() {
           <div className="bg-gradient-to-br from-primary to-accent p-6 rounded-2xl text-primary-foreground mb-6 slide-up">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-bold">Bugungi kun</h2>
+                <h2 className="text-xl font-bold">{t('dashboard.today')}</h2>
                 <p className="text-primary-foreground/80">
                   {new Date().toLocaleDateString('uz-UZ', { 
                     day: 'numeric', 

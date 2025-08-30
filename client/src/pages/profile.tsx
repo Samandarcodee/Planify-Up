@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
-import { User, Settings, Trophy, TrendingUp, Calendar } from "lucide-react";
+import { User, Settings, Trophy, TrendingUp, Calendar, Moon, Sun, Globe } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "@/components/app-header";
 import { BottomNavigation } from "@/components/bottom-navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { tgApp } from "@/lib/telegram";
+import { useTheme } from "@/lib/theme";
+import { useLanguage } from "@/lib/language";
 import { type Achievement } from "@shared/schema";
 
 export default function Profile() {
   const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
   const telegramUser = tgApp.getUser();
+  const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     if (telegramUser) {
@@ -173,37 +178,84 @@ export default function Profile() {
 
         {/* Settings */}
         <section className="mb-8">
-          <Card>
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start"
-                  data-testid="button-settings"
-                >
-                  <Settings className="w-4 h-4 mr-3" />
-                  Sozlamalar
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start text-destructive hover:text-destructive"
-                  data-testid="button-logout"
-                >
-                  Chiqish
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <h3 className="text-lg font-semibold text-foreground mb-4">{t('profile.settings')}</h3>
+          
+          <div className="space-y-4">
+            {/* Language Settings */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Globe className="w-5 h-5 text-muted-foreground" />
+                    <span className="font-medium">{t('profile.language')}</span>
+                  </div>
+                  <Select value={language} onValueChange={(value: any) => setLanguage(value)}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="uz">O'zbek</SelectItem>
+                      <SelectItem value="ru">Русский</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Theme Settings */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {theme === 'dark' ? (
+                      <Moon className="w-5 h-5 text-muted-foreground" />
+                    ) : (
+                      <Sun className="w-5 h-5 text-muted-foreground" />
+                    )}
+                    <span className="font-medium">{t('profile.theme')}</span>
+                  </div>
+                  <Select value={theme} onValueChange={(value: any) => setTheme(value)}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="light">{t('profile.light_mode')}</SelectItem>
+                      <SelectItem value="dark">{t('profile.dark_mode')}</SelectItem>
+                      <SelectItem value="system">System</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Other Settings */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    data-testid="button-settings"
+                  >
+                    <Settings className="w-4 h-4 mr-3" />
+                    {t('profile.settings')}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-destructive hover:text-destructive"
+                    data-testid="button-logout"
+                  >
+                    {t('profile.logout')}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </section>
       </main>
 
       <BottomNavigation />
-      
-      <TaskModal 
-        open={taskModalOpen} 
-        onOpenChange={setTaskModalOpen}
-        userId={currentUserId}
-      />
     </div>
   );
 }

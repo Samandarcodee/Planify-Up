@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
 import { tgApp } from "./lib/telegram";
+import { ThemeProvider } from "./lib/theme";
+import { LanguageProvider } from "./lib/language";
 import Dashboard from "@/pages/dashboard";
 import Tasks from "@/pages/tasks";
 import Goals from "@/pages/goals";
@@ -29,25 +31,20 @@ function App() {
   useEffect(() => {
     // Initialize Telegram Web App
     tgApp.init();
-    
-    // Apply Telegram theme if available
-    const themeParams = tgApp.getThemeParams();
-    if (themeParams.bg_color) {
-      document.documentElement.style.setProperty('--background', themeParams.bg_color);
-    }
-    if (themeParams.text_color) {
-      document.documentElement.style.setProperty('--foreground', themeParams.text_color);
-    }
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="app-container min-h-screen bg-background">
-          <Toaster />
-          <Router />
-        </div>
-      </TooltipProvider>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <LanguageProvider>
+          <TooltipProvider>
+            <div className="app-container min-h-screen bg-background">
+              <Toaster />
+              <Router />
+            </div>
+          </TooltipProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

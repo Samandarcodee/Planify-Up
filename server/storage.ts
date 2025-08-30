@@ -1,4 +1,6 @@
-import { type User, type InsertUser, type Task, type InsertTask, type Goal, type InsertGoal, type Achievement, type InsertAchievement } from "@shared/schema";
+import { users, type User, type InsertUser, tasks, type Task, type InsertTask, goals, type Goal, type InsertGoal, achievements, type Achievement, type InsertAchievement } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -37,127 +39,105 @@ export interface IStorage {
   }>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private tasks: Map<string, Task>;
-  private goals: Map<string, Goal>;
-  private achievements: Map<string, Achievement>;
+// MemStorage kept for backup, using DatabaseStorage now
 
-  constructor() {
-    this.users = new Map();
-    this.tasks = new Map();
-    this.goals = new Map();
-    this.achievements = new Map();
-  }
-
-  // User methods
+// DatabaseStorage implementation
+export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async getUserByTelegramId(telegramId: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.telegramId === telegramId,
-    );
+    const [user] = await db.select().from(users).where(eq(users.telegramId, telegramId));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   // Task methods
   async getUserTasks(userId: string): Promise<Task[]> {
-    return Array.from(this.tasks.values()).filter(task => task.userId === userId);
+    return await db.select().from(tasks).where(eq(tasks.userId, userId));
   }
 
   async getTasksByDate(userId: string, date: string): Promise<Task[]> {
-    return Array.from(this.tasks.values()).filter(
-      task => task.userId === userId && task.date === date
-    );
+    return await db.select().from(tasks).where(and(eq(tasks.userId, userId), eq(tasks.date, date)));
   }
 
   async createTask(insertTask: InsertTask): Promise<Task> {
-    const id = randomUUID();
-    const task: Task = { 
-      ...insertTask, 
-      id, 
-      completed: false,
-      createdAt: new Date()
-    };
-    this.tasks.set(id, task);
+    const [task] = await db
+      .insert(tasks)
+      .values(insertTask)
+      .returning();
     return task;
   }
 
   async updateTask(id: string, updates: Partial<Task>): Promise<Task | undefined> {
-    const task = this.tasks.get(id);
-    if (!task) return undefined;
-    
-    const updatedTask = { ...task, ...updates };
-    this.tasks.set(id, updatedTask);
-    return updatedTask;
+    const [task] = await db
+      .update(tasks)
+      .set(updates)
+      .where(eq(tasks.id, id))
+      .returning();
+    return task || undefined;
   }
 
   async deleteTask(id: string): Promise<boolean> {
-    return this.tasks.delete(id);
+    const result = await db.delete(tasks).where(eq(tasks.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
   // Goal methods
   async getUserGoals(userId: string): Promise<Goal[]> {
-    return Array.from(this.goals.values()).filter(goal => goal.userId === userId);
+    return await db.select().from(goals).where(eq(goals.userId, userId));
   }
 
   async getActiveGoals(userId: string): Promise<Goal[]> {
-    return Array.from(this.goals.values()).filter(
-      goal => goal.userId === userId && !goal.completed
-    );
+    return await db.select().from(goals).where(and(eq(goals.userId, userId), eq(goals.completed, false)));
   }
 
   async createGoal(insertGoal: InsertGoal): Promise<Goal> {
-    const id = randomUUID();
-    const goal: Goal = { 
-      ...insertGoal, 
-      id, 
-      currentValue: 0,
-      completed: false,
-      createdAt: new Date()
-    };
-    this.goals.set(id, goal);
+    const [goal] = await db
+      .insert(goals)
+      .values(insertGoal)
+      .returning();
     return goal;
   }
 
   async updateGoal(id: string, updates: Partial<Goal>): Promise<Goal | undefined> {
-    const goal = this.goals.get(id);
-    if (!goal) return undefined;
-    
-    const updatedGoal = { ...goal, ...updates };
-    this.goals.set(id, updatedGoal);
-    return updatedGoal;
+    const [goal] = await db
+      .update(goals)
+      .set(updates)
+      .where(eq(goals.id, id))
+      .returning();
+    return goal || undefined;
   }
 
   async deleteGoal(id: string): Promise<boolean> {
-    return this.goals.delete(id);
+    const result = await db.delete(goals).where(eq(goals.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
   // Achievement methods
   async getUserAchievements(userId: string): Promise<Achievement[]> {
-    return Array.from(this.achievements.values()).filter(
-      achievement => achievement.userId === userId
-    );
+    return await db.select().from(achievements).where(eq(achievements.userId, userId));
   }
 
   async createAchievement(insertAchievement: InsertAchievement): Promise<Achievement> {
-    const id = randomUUID();
-    const achievement: Achievement = { ...insertAchievement, id };
-    this.achievements.set(id, achievement);
+    const [achievement] = await db
+      .insert(achievements)
+      .values(insertAchievement)
+      .returning();
     return achievement;
   }
 
@@ -205,4 +185,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
