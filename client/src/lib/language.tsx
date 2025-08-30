@@ -131,6 +131,17 @@ const translations = {
     "common.month": "oy",
     "common.year": "yil",
     "common.user": "Foydalanuvchi",
+    
+    // Additional translations
+    "profile.motivation": "Vazifalarni bajaring va maqsadlarga erishing!",
+    "profile.system_mode": "Sistema",
+    "goals.updated_success": "Maqsad yangilandi",
+    "goals.updated_error": "Maqsad yangilanmadi", 
+    "goals.deleted_success": "Maqsad o'chirildi",
+    "goals.deleted_error": "Maqsad o'chirilmadi",
+    "tasks.updated_error": "Vazifa yangilanmadi",
+    "tasks.deleted_success": "Vazifa o'chirildi",
+    "tasks.deleted_error": "Vazifa o'chirilmadi",
   },
   
   ru: {
@@ -250,6 +261,17 @@ const translations = {
     "common.month": "месяц", 
     "common.year": "год",
     "common.user": "Пользователь",
+    
+    // Additional translations  
+    "profile.motivation": "Выполняйте задачи и достигайте целей!",
+    "profile.system_mode": "Система",
+    "goals.updated_success": "Цель обновлена",
+    "goals.updated_error": "Цель не обновлена",
+    "goals.deleted_success": "Цель удалена", 
+    "goals.deleted_error": "Цель не удалена",
+    "tasks.updated_error": "Задача не обновлена",
+    "tasks.deleted_success": "Задача удалена",
+    "tasks.deleted_error": "Задача не удалена",
   },
   
   en: {
@@ -369,6 +391,17 @@ const translations = {
     "common.month": "month",
     "common.year": "year",
     "common.user": "User",
+    
+    // Additional translations
+    "profile.motivation": "Complete tasks and achieve your goals!",
+    "profile.system_mode": "System",
+    "goals.updated_success": "Goal updated",
+    "goals.updated_error": "Goal not updated",
+    "goals.deleted_success": "Goal deleted",
+    "goals.deleted_error": "Goal not deleted", 
+    "tasks.updated_error": "Task not updated",
+    "tasks.deleted_success": "Task deleted",
+    "tasks.deleted_error": "Task not deleted",
   }
 };
 

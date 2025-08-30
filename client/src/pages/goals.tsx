@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { tgApp } from "@/lib/telegram";
+import { useLanguage } from "@/lib/language";
 import { type Goal } from "@shared/schema";
 
 export default function Goals() {
@@ -18,6 +19,7 @@ export default function Goals() {
   const [currentUserId, setCurrentUserId] = useState<string>("demo-user");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const telegramUser = tgApp.getUser();
@@ -40,14 +42,14 @@ export default function Goals() {
       queryClient.invalidateQueries({ queryKey: ["/api/goals", currentUserId] });
       queryClient.invalidateQueries({ queryKey: ["/api/stats", currentUserId] });
       toast({
-        title: "Muvaffaqiyat!",
-        description: "Maqsad yangilandi.",
+        title: t('common.success'),
+        description: t('goals.updated_success'),
       });
     },
     onError: () => {
       toast({
-        title: "Xatolik!",
-        description: "Maqsad yangilanmadi.",
+        title: t('common.error'),
+        description: t('goals.updated_error'),
         variant: "destructive",
       });
     },
@@ -62,14 +64,14 @@ export default function Goals() {
       queryClient.invalidateQueries({ queryKey: ["/api/goals", currentUserId] });
       queryClient.invalidateQueries({ queryKey: ["/api/stats", currentUserId] });
       toast({
-        title: "Muvaffaqiyat!",
-        description: "Maqsad o'chirildi.",
+        title: t('common.success'),
+        description: t('goals.deleted_success'),
       });
     },
     onError: () => {
       toast({
-        title: "Xatolik!",
-        description: "Maqsad o'chirilmadi.",
+        title: t('common.error'),
+        description: t('goals.deleted_error'),
         variant: "destructive",
       });
     },
@@ -98,7 +100,7 @@ export default function Goals() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Maqsadlar yuklanmoqda...</p>
+          <p className="text-muted-foreground">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -110,7 +112,7 @@ export default function Goals() {
       
       <main className="px-4">
         <div className="flex items-center justify-between my-6">
-          <h1 className="text-2xl font-bold text-foreground">Maqsadlar</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t('goals.title')}</h1>
           <Button onClick={() => setGoalModalOpen(true)} data-testid="button-add-goal">
             <Plus className="w-4 h-4" />
           </Button>
@@ -119,10 +121,10 @@ export default function Goals() {
         <Tabs defaultValue="active" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="active" data-testid="tab-active-goals">
-              Faol ({activeGoals.length})
+              {t('goals.active')} ({activeGoals.length})
             </TabsTrigger>
             <TabsTrigger value="completed" data-testid="tab-completed-goals">
-              Bajarilgan ({completedGoals.length})
+              {t('goals.completed')} ({completedGoals.length})
             </TabsTrigger>
           </TabsList>
           

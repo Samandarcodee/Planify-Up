@@ -130,6 +130,35 @@
   .w-32 {
     width: 6rem;
   }
+  
+  /* Fix text overflow */
+  .text-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+/* Text overflow fixes */
+.text-overflow-fix {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Card content padding fixes for mobile */
+@media (max-width: 400px) {
+  .card-content-mobile {
+    padding: 12px 8px;
+  }
+  
+  .grid-mobile {
+    gap: 8px;
+  }
+  
+  .text-responsive {
+    font-size: 0.875rem;
+  }
 }
 
 .glass-effect {

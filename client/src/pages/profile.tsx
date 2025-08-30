@@ -67,13 +67,13 @@ export default function Profile() {
                   <div className="text-lg font-bold text-primary" data-testid="text-profile-total-tasks">
                     {stats?.totalTasks || 0}
                   </div>
-                  <div className="text-xs text-muted-foreground">Vazifalar</div>
+                  <div className="text-xs text-muted-foreground">{t('profile.tasks')}</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-secondary" data-testid="text-profile-total-goals">
                     {stats?.totalGoals || 0}
                   </div>
-                  <div className="text-xs text-muted-foreground">Maqsadlar</div>
+                  <div className="text-xs text-muted-foreground">{t('profile.goals')}</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-accent" data-testid="text-profile-achievements">
@@ -151,7 +151,7 @@ export default function Profile() {
                 <Trophy className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-muted-foreground mb-4">Hali yutuqlar yo'q</p>
                 <p className="text-sm text-muted-foreground">
-                  Vazifalarni bajaring va maqsadlarga erishing!
+                  {t('profile.motivation')}
                 </p>
               </CardContent>
             </Card>
@@ -229,7 +229,7 @@ export default function Profile() {
                     <SelectContent>
                       <SelectItem value="light">{t('profile.light_mode')}</SelectItem>
                       <SelectItem value="dark">{t('profile.dark_mode')}</SelectItem>
-                      <SelectItem value="system">Sistema</SelectItem>
+                      <SelectItem value="system">{t('profile.system_mode')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

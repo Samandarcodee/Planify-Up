@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { tgApp } from "@/lib/telegram";
+import { useLanguage } from "@/lib/language";
 import { type Task } from "@shared/schema";
 
 export default function Tasks() {
@@ -19,6 +20,7 @@ export default function Tasks() {
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const telegramUser = tgApp.getUser();
@@ -43,8 +45,8 @@ export default function Tasks() {
     },
     onError: () => {
       toast({
-        title: "Xatolik!",
-        description: "Vazifa yangilanmadi.",
+        title: t('common.error'),
+        description: t('tasks.updated_error'),
         variant: "destructive",
       });
     },
@@ -59,14 +61,14 @@ export default function Tasks() {
       queryClient.invalidateQueries({ queryKey: ["/api/tasks", currentUserId] });
       queryClient.invalidateQueries({ queryKey: ["/api/stats", currentUserId] });
       toast({
-        title: "Muvaffaqiyat!",
-        description: "Vazifa o'chirildi.",
+        title: t('common.success'),
+        description: t('tasks.deleted_success'),
       });
     },
     onError: () => {
       toast({
-        title: "Xatolik!",
-        description: "Vazifa o'chirilmadi.",
+        title: t('common.error'),
+        description: t('tasks.deleted_error'),
         variant: "destructive",
       });
     },
@@ -100,7 +102,7 @@ export default function Tasks() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Vazifalar yuklanmoqda...</p>
+          <p className="text-muted-foreground">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -112,7 +114,7 @@ export default function Tasks() {
       
       <main className="px-4">
         <div className="flex items-center justify-between my-6">
-          <h1 className="text-2xl font-bold text-foreground">Vazifalar</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t('tasks.title')}</h1>
           <div className="flex space-x-2">
             <Select value={filterCategory} onValueChange={setFilterCategory}>
               <SelectTrigger className="w-32" data-testid="select-filter-category">
