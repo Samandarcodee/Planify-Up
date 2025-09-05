@@ -1,5 +1,6 @@
 import { notificationService } from './notification-service';
 import { storage } from './storage';
+import type { User } from '@shared/schema';
 
 export class NotificationScheduler {
   private static instance: NotificationScheduler;
@@ -134,10 +135,10 @@ export class NotificationScheduler {
   }
 
   // Barcha foydalanuvchilarni olish (yordamchi funksiya)
-  private async getAllUsers() {
+  private async getAllUsers(): Promise<User[]> {
     // Bu soddalashtirilgan usul - aslida database dan barcha foydalanuvchilarni olish kerak
     // Hozircha mavjud foydalanuvchilarni qaytaramiz
-    const users = [];
+    const users: User[] = [];
     
     // Demo user
     try {
