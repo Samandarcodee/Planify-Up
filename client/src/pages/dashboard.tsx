@@ -392,7 +392,7 @@ function TaskCard({ task }: { task: Task }) {
 }
 
 function GoalCard({ goal }: { goal: Goal }) {
-  const progressPercentage = (goal.currentValue / goal.targetValue) * 100;
+  const progressPercentage = ((goal.currentValue || 0) / goal.targetValue) * 100;
   
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -416,7 +416,7 @@ function GoalCard({ goal }: { goal: Goal }) {
           <div className="flex justify-between text-sm mb-1">
             <span className="text-muted-foreground">Jarayon</span>
             <span className="font-medium">
-              {goal.currentValue}/{goal.targetValue} {goal.unit}
+              {goal.currentValue || 0}/{goal.targetValue} {goal.unit}
             </span>
           </div>
           <div className="w-full bg-muted rounded-full h-2">
@@ -428,7 +428,10 @@ function GoalCard({ goal }: { goal: Goal }) {
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">
-            Tugash: {formatDate(goal.deadline)}
+            Tugash: {new Date(goal.deadline).toLocaleDateString('uz-UZ', { 
+              day: 'numeric', 
+              month: 'long' 
+            })}
           </span>
           <Button variant="ghost" size="sm" data-testid={`button-update-goal-${goal.id}`}>
             Yangilash

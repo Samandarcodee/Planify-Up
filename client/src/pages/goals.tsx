@@ -81,8 +81,8 @@ export default function Goals() {
   const completedGoals = allGoals.filter(goal => goal.completed);
 
   const incrementGoalProgress = (goal: Goal) => {
-    if (goal.currentValue < goal.targetValue) {
-      const newValue = goal.currentValue + 1;
+    if ((goal.currentValue || 0) < goal.targetValue) {
+      const newValue = (goal.currentValue || 0) + 1;
       const completed = newValue >= goal.targetValue;
       
       updateGoalMutation.mutate({
@@ -201,7 +201,7 @@ interface GoalCardProps {
 }
 
 function GoalCard({ goal, onIncrement, onDelete }: GoalCardProps) {
-  const progressPercentage = (goal.currentValue / goal.targetValue) * 100;
+  const progressPercentage = ((goal.currentValue || 0) / goal.targetValue) * 100;
   
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -238,7 +238,7 @@ function GoalCard({ goal, onIncrement, onDelete }: GoalCardProps) {
           <div className="flex justify-between text-sm mb-1">
             <span className="text-muted-foreground">Jarayon</span>
             <span className="font-medium">
-              {goal.currentValue}/{goal.targetValue} {goal.unit}
+              {goal.currentValue || 0}/{goal.targetValue} {goal.unit}
             </span>
           </div>
           <Progress value={progressPercentage} className="h-2" />
@@ -249,7 +249,7 @@ function GoalCard({ goal, onIncrement, onDelete }: GoalCardProps) {
             Tugash: {formatDate(goal.deadline)}
           </span>
           <div className="flex space-x-2">
-            {!goal.completed && goal.currentValue < goal.targetValue && (
+            {!goal.completed && (goal.currentValue || 0) < goal.targetValue && (
               <Button 
                 size="sm" 
                 onClick={onIncrement}

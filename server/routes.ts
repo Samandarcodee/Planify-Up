@@ -3,16 +3,60 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertTaskSchema, insertGoalSchema, insertAchievementSchema } from "@shared/schema";
 import { z } from "zod";
+import { authenticateToken, rateLimit, hashPassword, generateToken } from "./auth";
+import { cacheMiddleware, invalidateCache } from "./cache";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Apply rate limiting to all routes
+  app.use(rateLimit(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
+
   // User routes
   app.post("/api/users", async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
+      
+      // Hash password before storing
+      if (userData.password) {
+        userData.password = await hashPassword(userData.password);
+      }
+      
       const user = await storage.createUser(userData);
-      res.json(user);
+      
+      // Generate JWT token
+      const token = generateToken(user.id, user.username);
+      
+      res.json({ user, token });
     } catch (error) {
       res.status(400).json({ message: error instanceof Error ? error.message : "Invalid user data" });
+    }
+  });
+
+  // Login route
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Verify password
+      const isValidPassword = await storage.verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Generate JWT token
+      const token = generateToken(user.id, user.username);
+      
+      res.json({ user, token });
+    } catch (error) {
+      res.status(500).json({ message: "Login failed" });
     }
   });
 

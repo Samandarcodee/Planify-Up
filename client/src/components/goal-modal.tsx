@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { insertGoalSchema, type InsertGoal } from "@shared/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -32,7 +32,6 @@ export function GoalModal({ open, onOpenChange, userId }: GoalModalProps) {
   const queryClient = useQueryClient();
   
   const form = useForm<InsertGoal>({
-    resolver: zodResolver(insertGoalSchema),
     defaultValues: {
       userId,
       title: "",
@@ -113,6 +112,7 @@ export function GoalModal({ open, onOpenChange, userId }: GoalModalProps) {
                       placeholder="Maqsad haqida batafsil..." 
                       rows={3}
                       {...field}
+                      value={field.value || ''}
                       data-testid="textarea-goal-description"
                     />
                   </FormControl>

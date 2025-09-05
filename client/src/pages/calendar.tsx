@@ -9,6 +9,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { userService } from "@/lib/user-service";
 import { type Task } from "@shared/schema";
 
+interface CalendarDay {
+  date: number;
+  isCurrentMonth: boolean;
+  fullDate: string;
+  tasks: Task[];
+  isToday?: boolean;
+}
+
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -39,7 +47,7 @@ export default function Calendar() {
     const firstDayOfWeek = firstDay.getDay();
     const daysInMonth = lastDay.getDate();
 
-    const days = [];
+    const days: CalendarDay[] = [];
     
     // Previous month days
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
