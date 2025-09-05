@@ -166,6 +166,11 @@ Keyingi yutuqlar uchun davom eting! 💪🚀`;
 
   // Asosiy notification yuborish funksiyasi
   private async sendNotification(telegramId: string, message: string): Promise<void> {
+    if (!bot) {
+      console.log('Bot not initialized - notification skipped');
+      return;
+    }
+    
     try {
       await bot.sendMessage(telegramId, message, {
         parse_mode: 'Markdown',

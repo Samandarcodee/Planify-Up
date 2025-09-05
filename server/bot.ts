@@ -2,23 +2,23 @@ import TelegramBot from 'node-telegram-bot-api';
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
-if (!token) {
-  console.log('Telegram bot token not found. Bot will not start.');
-  process.exit(0);
-}
-
 // Public base URL for web app and webhook (set this in Railway as APP_BASE_URL)
 const appBaseUrl = process.env.APP_BASE_URL || (process.env.REPLIT_DOMAINS?.split(',')[0]
   ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
   : undefined);
 
-// Create a bot without polling in Replit environment
-const bot = new TelegramBot(token, { 
+// Create a bot without polling - but only if token exists
+const bot = token ? new TelegramBot(token, { 
   polling: false
-});
+}) : null as any;
+
+if (!token) {
+  console.log('Telegram bot token not found. Bot features will be disabled.');
+}
 
 // Bot kommandalari
-bot.onText(/\/start/, (msg) => {
+if (bot) {
+  bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   const firstName = msg.from?.first_name || 'Foydalanuvchi';
   
@@ -48,10 +48,10 @@ Mini ilovaga kirish uchun pastdagi tugmani bosing! 👇`;
     }
   };
 
-  bot.sendMessage(chatId, welcomeMessage, options);
-});
+    bot.sendMessage(chatId, welcomeMessage, options);
+  });
 
-bot.onText(/\/help/, (msg) => {
+  bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
   
   const helpMessage = `🎯 **Planify Up - Sizning shaxsiy assistentingiz**
@@ -81,29 +81,37 @@ bot.onText(/\/help/, (msg) => {
 Muammo bo'lsa, /start ni qayta ishlatib ko'ring
 Planify Up - sizning muvaffaqiyat kalit! 🗝️✨`;
 
-  bot.sendMessage(chatId, helpMessage);
-});
+    bot.sendMessage(chatId, helpMessage);
+  });
 
-// Xato holatlarini boshqarish
-bot.on('polling_error', (error) => {
-  console.log('Polling error:', error);
-});
+  // Xato holatlarini boshqarish
+  bot.on('polling_error', (error) => {
+    console.log('Polling error:', error);
+  });
 
-bot.on('webhook_error', (error) => {
-  console.log('Webhook error:', error);
-});
+  bot.on('webhook_error', (error) => {
+    console.log('Webhook error:', error);
+  });
+}
 
 // Webhook endpoint qo'shamiz
 export const setupBotWebhook = (app: any) => {
+  if (!bot || !token) {
+    console.log('Bot webhook setup skipped - no bot token');
+    return;
+  }
+  
   const webhookPath = `/bot${token}`;
   
   app.post(webhookPath, (req: any, res: any) => {
-    bot.processUpdate(req.body);
+    if (bot) {
+      bot.processUpdate(req.body);
+    }
     res.sendStatus(200);
   });
   
   // Set webhook URL if a public base URL is provided
-  if (appBaseUrl) {
+  if (appBaseUrl && bot) {
     const webhookUrl = `${appBaseUrl}${webhookPath}`;
     bot.setWebHook(webhookUrl).then(() => {
       console.log(`Telegram bot webhook set to: ${webhookUrl}`);
