@@ -7,6 +7,11 @@ if (!token) {
   process.exit(0);
 }
 
+// Public base URL for web app and webhook (set this in Railway as APP_BASE_URL)
+const appBaseUrl = process.env.APP_BASE_URL || (process.env.REPLIT_DOMAINS?.split(',')[0]
+  ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
+  : undefined);
+
 // Create a bot without polling in Replit environment
 const bot = new TelegramBot(token, { 
   polling: false
@@ -35,9 +40,7 @@ Mini ilovaga kirish uchun pastdagi tugmani bosing! 👇`;
           {
             text: '🚀 Sayohatni boshlash',
             web_app: {
-              url: process.env.REPLIT_DOMAINS?.split(',')[0] 
-                ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
-                : 'https://your-replit-domain.replit.app'
+              url: appBaseUrl || 'http://localhost:5000'
             }
           }
         ]
@@ -99,11 +102,9 @@ export const setupBotWebhook = (app: any) => {
     res.sendStatus(200);
   });
   
-  // Set webhook URL if in production
-  if (process.env.REPLIT_DOMAINS) {
-    const domain = process.env.REPLIT_DOMAINS.split(',')[0];
-    const webhookUrl = `https://${domain}${webhookPath}`;
-    
+  // Set webhook URL if a public base URL is provided
+  if (appBaseUrl) {
+    const webhookUrl = `${appBaseUrl}${webhookPath}`;
     bot.setWebHook(webhookUrl).then(() => {
       console.log(`Telegram bot webhook set to: ${webhookUrl}`);
     }).catch((error) => {
